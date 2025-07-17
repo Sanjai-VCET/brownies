@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brownie & Co. - Deliciously Yours</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://dimensions-3d-viewer.cloudinary.com/1.0.12/all.js"></script>
+    <script src="https://dimensions-tag.cloudinary.com/0.0.105/all.js"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .pacifico { font-family: 'Pacifico', cursive; }
+        .modal { transition: opacity 0.25s ease; }
+        .modal-active { opacity: 1; pointer-events: auto; }
+        .modal-inactive { opacity: 0; pointer-events: none; }
+        .gemini-btn {
+            background-color: #f3e8ff;
+            color: #8b5cf6;
+            transition: all 0.2s ease-in-out;
+        }
+        .gemini-btn:hover {
+            background-color: #e9d5ff;
+            color: #7c3aed;
+        }
+        .chat-bubble-user { background-color: #e0e7ff; align-self: flex-end; }
+        .chat-bubble-ai { background-color: #f3e8ff; align-self: flex-start; }
+    </style>
+</head>
+<body class="bg-pink-50">
+
+    <div id="main-website">
+        <header class="bg-white shadow-md sticky top-0 z-20">
+            <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+                <h1 class="text-3xl text-pink-500 pacifico">Brownie & Co.</h1>
+                <div>
+                    <a href="#products" class="text-gray-700 hover:text-pink-500 mx-3">Products</a>
+                    <a href="#about" class="text-gray-700 hover:text-pink-500 mx-3">About</a>
+                    <a href="#contact" class="text-gray-700 hover:text-pink-500 mx-3">Contact</a>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Hero Section -->
+            <section class="py-12 md:py-20 bg-white">
+                <div class="container mx-auto px-6 text-center">
+                    <div class="md:flex md:items-center">
+                        <div class="md:w-1/2 text-left pr-8">
+                            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Baked with Love, Just for You.</h2>
+                            <p class="text-lg text-gray-600 mb-8">Discover our heavenly brownies and delightful cupcakes.</p>
+                            <a href="#products" class="bg-pink-500 text-white font-bold py-3 px-8 rounded-full hover:bg-pink-600">Explore Treats</a>
+                        </div>
+                        <div class="md:w-1/2 mt-10 md:mt-0">
+                             <div id="three-d-viewer" style="height: 400px" class="bg-pink-100 rounded-lg shadow-lg" data-d8s-type="3d" data-d8s-id="uploads_files_3278476_cupcake_k1xmpz-13-7-2025"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section id="products" class="py-16">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Our Sweet Creations</h2>
+                    <div id="categories-container" class="space-y-12"></div>
+                </div>
+            </section>
+            
+            <!-- About Section -->
+            <section id="about" class="py-16 bg-white">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Our Story</h2>
+                    <div class="max-w-3xl mx-auto text-center text-gray-600">
+                        <p>Welcome to Brownie & Co.! We started in a small home kitchen with a passion for baking and a dream to share our love for desserts. Every brownie and cupcake is a piece of our heart, baked with care, precision, and only the best ingredients.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="py-16">
+                 <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Place Your Order</h2>
+                    <div class="max-w-lg mx-auto">
+                        <form id="contact-form" class="bg-white p-8 rounded-lg shadow-lg">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="name" name="name" type="text" placeholder="Your Name" required>
+                            </div>
+                             <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">Phone Number</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="phone" name="phone" type="text" placeholder="Your Phone Number" required>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="message">Order Details / Inquiry</label>
+                                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 h-32" id="message" name="message" placeholder="e.g., 'I'd like to order a box of 6 Choco-Lava Cupcakes...'" required></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button id="submit-inquiry-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full" type="submit">
+                                    Send Inquiry
+                                </button>
+                            </div>
+                            <p id="form-response" class="text-center mt-4"></p>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="bg-gray-800 text-white py-6">
+            <div class="container mx-auto px-6 text-center">
+                <p>&copy; 2025 Brownie & Co. All Rights Reserved.</p>
+            </div>
+        </footer>
+
+        <!-- Product Detail Modal -->
+        <div id="product-modal" class="modal modal-inactive fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30 p-4">
+            <div id="product-modal-content" class="bg-white rounded-lg shadow-xl w-full max-w-md"></div>
+        </div>
+    </div>
+
+    <script>
+        const d8sApi = initDimensions({ cloudName: "duxgugnte", viewers: ["3D"] });
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyCH6o9qBcOTxKdPw0AWQVwZgXMGgrV4fVI",
+            authDomain: "test-95f0d.firebaseapp.com",
+            databaseURL: "https://test-95f0d-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "test-95f0d",
+            storageBucket: "test-95f0d.appspot.com",
+            messagingSenderId: "583181889598",
+            appId: "1:583181889598:web:d6d3b23a3e2bdd4992a16f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- Website Analytics: Track Visits ---
+        async function trackVisit() {
+            if (!sessionStorage.getItem('visited')) {
+                const analyticsDocRef = doc(db, "analytics", "siteStats");
+                await setDoc(analyticsDocRef, { visits: increment(1) }, { merge: true });
+                sessionStorage.setItem('visited', 'true');
+            }
+        }
+        trackVisit();
+
+        // --- Firestore Data Fetching ---
+        const categoriesContainer = document.getElementById('categories-container');
+        const productModal = document.getElementById('product-modal');
+        const productModalContent = document.getElementById('product-modal-content');
+
+        function renderData(categories, products) {
+            categoriesContainer.innerHTML = '';
+            categories.forEach(category => {
+                const categoryProducts = products.filter(p => p.categoryId === category.id);
+                if (categoryProducts.length === 0) return;
+                
+                const categoryElement = document.createElement('div');
+                let productsHTML = categoryProducts.map(product => `
+                    <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 cursor-pointer" data-product='${JSON.stringify(product)}'>
+                        <img src="${product.imageUrl || 'https://placehold.co/600x400/f8a5c2/ffffff?text=Yummy!'}" alt="${product.name}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="text-lg font-bold text-gray-800">${product.name}</h4>
+                            <p class="text-pink-500 font-semibold mt-1">₹${product.price}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                categoryElement.innerHTML = `
+                    <h3 class="text-2xl font-bold text-gray-700 mb-6">${category.name}</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">${productsHTML}</div>
+                `;
+                categoriesContainer.appendChild(categoryElement);
+            });
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', () => showProductModal(JSON.parse(card.dataset.product)));
+            });
+        }
+
+        onSnapshot(collection(db, "categories"), (catSnapshot) => {
+            const categories = catSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            onSnapshot(collection(db, "products"), (prodSnapshot) => {
+                const products = prodSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderData(categories, products);
+            });
+        });
+
+        function showProductModal(product) {
+            productModalContent.innerHTML = `
+                <div class="relative">
+                     <button id="close-modal-btn" class="absolute top-2 right-3 text-gray-500 hover:text-gray-800 text-2xl z-10">&times;</button>
+                     <img src="${product.imageUrl || 'https://placehold.co/600x400/f8a5c2/ffffff?text=Yummy!'}" alt="${product.name}" class="w-full h-64 object-cover rounded-t-lg">
+                     <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800">${product.name}</h3>
+                        <p class="text-2xl text-pink-500 font-bold my-3">₹${product.price}</p>
+                        <p class="text-gray-600 mb-4">${product.description}</p>
+                        <button id="ai-assistant-btn" class="w-full gemini-btn font-bold py-2 px-6 rounded-lg mb-4">✨ Ask AI Assistant</button>
+                        <div id="ai-chat-container" class="hidden border-t pt-4 mt-4">
+                            <div id="ai-chat-box" class="h-40 overflow-y-auto p-2 bg-gray-50 rounded-md flex flex-col space-y-2 mb-2"></div>
+                            <form id="ai-chat-form" class="flex space-x-2">
+                                <input type="text" id="ai-chat-input" placeholder="Is this eggless?" class="flex-grow shadow-sm border-gray-300 rounded-md">
+                                <button type="submit" class="bg-pink-500 text-white font-bold py-2 px-4 rounded-md">Send</button>
+                            </form>
+                        </div>
+                     </div>
+                </div>`;
+            productModal.classList.remove('modal-inactive');
+            productModal.classList.add('modal-active');
+            
+            document.getElementById('close-modal-btn').addEventListener('click', closeProductModal);
+            document.getElementById('ai-assistant-btn').addEventListener('click', () => {
+                document.getElementById('ai-chat-container').classList.toggle('hidden');
+            });
+            document.getElementById('ai-chat-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                handleAIChat(product);
+            });
+        }
+        
+        function closeProductModal() {
+            productModal.classList.add('modal-inactive');
+        }
+        productModal.addEventListener('click', (e) => {
+            if (e.target === productModal) closeProductModal();
+        });
+
+        // --- Gemini AI Chat Assistant ---
+        async function handleAIChat(product) {
+            const chatBox = document.getElementById('ai-chat-box');
+            const input = document.getElementById('ai-chat-input');
+            const userQuestion = input.value.trim();
+            if (!userQuestion) return;
+
+            // Display user's question
+            const userBubble = document.createElement('div');
+            userBubble.className = 'p-2 rounded-lg chat-bubble-user';
+            userBubble.textContent = userQuestion;
+            chatBox.appendChild(userBubble);
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Display thinking indicator
+            const thinkingBubble = document.createElement('div');
+            thinkingBubble.className = 'p-2 rounded-lg chat-bubble-ai';
+            thinkingBubble.textContent = 'Thinking...';
+            chatBox.appendChild(thinkingBubble);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            const prompt = `You are a friendly and helpful AI assistant for 'Brownie & Co.', a home bakery in India. A customer is asking about a product. Here is the product information:
+            - Name: ${product.name}
+            - Description: ${product.description}
+            - Price: ₹${product.price}
+            
+            Now, answer the customer's question: "${userQuestion}".
+            
+            Keep your answer concise, friendly, and helpful. If the question is about specific ingredients or allergens and you don't know the answer, politely say that you don't have the exact recipe but it's made with high-quality ingredients, and suggest they ask the baker directly for specific allergy concerns. If the question is unrelated to the bakery, politely steer the conversation back to the delicious treats.`;
+
+            try {
+                const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = "AIzaSyC-vYnNw_ihPHq7yxc0ENYBk5iEFGY8wkA"; // Will be injected by the environment
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`API request failed`);
+                
+                const result = await response.json();
+                const aiResponse = result.candidates[0].content.parts[0].text;
+                thinkingBubble.textContent = aiResponse.trim();
+
+            } catch (error) {
+                console.error("Gemini Chat Error:", error);
+                thinkingBubble.textContent = "Sorry, I'm having a little trouble thinking right now. Please try again in a moment.";
+            } finally {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+        // --- Google Sheets Contact Form ---
+        const contactForm = document.getElementById('contact-form');
+        const formResponseEl = document.getElementById('form-response');
+        const submitBtn = document.getElementById('submit-inquiry-btn');
+        const G_SHEET_URL = "https://script.google.com/macros/s/AKfycbxpWWbG54m5bZ2YWAE7TJ3Iw4x3JoihFpLunkzdrMXv8x7ZrodNYMRSFqH6MbnJ8oIhhw/exec";
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            try {
+                // FIX: Added mode: 'no-cors' to prevent the CORS-related "Failed to fetch" error.
+                // This sends the data to the Google Sheet without trying to read the cross-origin response,
+                // which is often blocked by browser security policies.
+                await fetch(G_SHEET_URL, { 
+                    method: 'POST', 
+                    mode: 'no-cors',
+                    body: new FormData(contactForm) 
+                });
+                
+                // Since 'no-cors' prevents reading the response, we assume success if no error was thrown.
+                formResponseEl.textContent = "Thank you! We've received your inquiry.";
+                formResponseEl.style.color = 'green';
+                contactForm.reset();
+            } catch (error) {
+                // This will now only catch genuine network errors, not CORS blocks.
+                console.error('Error submitting to Google Sheets:', error);
+                formResponseEl.textContent = "Something went wrong. Please try again.";
+                formResponseEl.style.color = 'red';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Inquiry';
+            }
+        });
+    </script>
+</body>
+</html>
