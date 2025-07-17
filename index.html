@@ -8,23 +8,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <script src="https://dimensions-3d-viewer.cloudinary.com/1.0.12/all.js"></script>
     <script src="https://dimensions-tag.cloudinary.com/0.0.105/all.js"></script>
+    <!-- Added Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         body { font-family: 'Poppins', sans-serif; }
         .pacifico { font-family: 'Pacifico', cursive; }
         .modal { transition: opacity 0.25s ease; }
         .modal-active { opacity: 1; pointer-events: auto; }
         .modal-inactive { opacity: 0; pointer-events: none; }
-        .gemini-btn {
-            background-color: #f3e8ff;
-            color: #8b5cf6;
-            transition: all 0.2s ease-in-out;
-        }
-        .gemini-btn:hover {
-            background-color: #e9d5ff;
-            color: #7c3aed;
-        }
         .chat-bubble-user { background-color: #e0e7ff; align-self: flex-end; }
         .chat-bubble-ai { background-color: #f3e8ff; align-self: flex-start; }
+        #ai-chat-window {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        /* Styling for AI-generated Markdown content */
+        .chat-bubble-ai ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+        .chat-bubble-ai li {
+            margin-bottom: 4px;
+        }
     </style>
 </head>
 <body class="bg-pink-50">
@@ -113,9 +118,33 @@
         </footer>
 
         <!-- Product Detail Modal -->
-        <div id="product-modal" class="modal modal-inactive fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30 p-4">
+        <div id="product-modal" class="modal modal-inactive fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4">
             <div id="product-modal-content" class="bg-white rounded-lg shadow-xl w-full max-w-md"></div>
         </div>
+    </div>
+
+    <!-- Floating AI Chatbot -->
+    <div class="fixed bottom-5 right-5 z-50">
+        <!-- Chat Window -->
+        <div id="ai-chat-window" class="hidden absolute bottom-20 right-0 w-80 md:w-96 bg-white rounded-lg shadow-2xl flex flex-col transform translate-y-4 opacity-0">
+            <div class="p-4 bg-purple-600 text-white rounded-t-lg flex justify-between items-center">
+                <h3 class="font-bold">CoCo, your AI Assistant</h3>
+                <button id="close-chat-btn" class="text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div id="ai-chat-box" class="flex-grow p-4 overflow-y-auto h-80 flex flex-col space-y-2">
+                <div class="p-3 rounded-lg chat-bubble-ai">Hi! I'm CoCo. How can I help you find the perfect treat for your occasion today?</div>
+            </div>
+            <form id="ai-chat-form" class="p-4 border-t flex space-x-2">
+                <input type="text" id="ai-chat-input" placeholder="e.g., for a birthday" class="flex-grow shadow-sm border-gray-300 rounded-md">
+                <button type="submit" class="bg-pink-500 text-white font-bold py-2 px-4 rounded-md">Send</button>
+            </form>
+        </div>
+        <!-- Toggle Button -->
+        <button id="chat-toggle-btn" class="bg-purple-600 text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center hover:bg-purple-700 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.864 8.864 0 01-2.41-.382.5.5 0 00-.468.046l-1.882.941a.5.5 0 01-.622-.622l.94-1.882a.5.5 0 00.047-.468A6.967 6.967 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.416 14.92a6.981 6.981 0 001.624.962.5.5 0 00.622-.622l-.94-1.882a.5.5 0 01.047-.468l.002-.002a7.034 7.034 0 00.003-8.88.5.5 0 00-.622.622l.94 1.882a.5.5 0 01-.047.468A6.981 6.981 0 004.416 9.08z" clip-rule="evenodd" />
+            </svg>
+        </button>
     </div>
 
     <script>
@@ -139,6 +168,10 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // --- Global State for Products ---
+        let allProducts = [];
+        let allCategories = [];
 
         // --- Website Analytics: Track Visits ---
         async function trackVisit() {
@@ -184,10 +217,10 @@
         }
 
         onSnapshot(collection(db, "categories"), (catSnapshot) => {
-            const categories = catSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            allCategories = catSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             onSnapshot(collection(db, "products"), (prodSnapshot) => {
-                const products = prodSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderData(categories, products);
+                allProducts = prodSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderData(allCategories, allProducts);
             });
         });
 
@@ -200,27 +233,12 @@
                         <h3 class="text-2xl font-bold text-gray-800">${product.name}</h3>
                         <p class="text-2xl text-pink-500 font-bold my-3">₹${product.price}</p>
                         <p class="text-gray-600 mb-4">${product.description}</p>
-                        <button id="ai-assistant-btn" class="w-full gemini-btn font-bold py-2 px-6 rounded-lg mb-4">✨ Ask AI Assistant</button>
-                        <div id="ai-chat-container" class="hidden border-t pt-4 mt-4">
-                            <div id="ai-chat-box" class="h-40 overflow-y-auto p-2 bg-gray-50 rounded-md flex flex-col space-y-2 mb-2"></div>
-                            <form id="ai-chat-form" class="flex space-x-2">
-                                <input type="text" id="ai-chat-input" placeholder="Is this eggless?" class="flex-grow shadow-sm border-gray-300 rounded-md">
-                                <button type="submit" class="bg-pink-500 text-white font-bold py-2 px-4 rounded-md">Send</button>
-                            </form>
-                        </div>
                      </div>
                 </div>`;
             productModal.classList.remove('modal-inactive');
             productModal.classList.add('modal-active');
             
             document.getElementById('close-modal-btn').addEventListener('click', closeProductModal);
-            document.getElementById('ai-assistant-btn').addEventListener('click', () => {
-                document.getElementById('ai-chat-container').classList.toggle('hidden');
-            });
-            document.getElementById('ai-chat-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                handleAIChat(product);
-            });
         }
         
         function closeProductModal() {
@@ -230,41 +248,64 @@
             if (e.target === productModal) closeProductModal();
         });
 
-        // --- Gemini AI Chat Assistant ---
-        async function handleAIChat(product) {
+        // --- Floating AI Chatbot Logic ---
+        const chatToggleButton = document.getElementById('chat-toggle-btn');
+        const closeChatButton = document.getElementById('close-chat-btn');
+        const chatWindow = document.getElementById('ai-chat-window');
+        const chatForm = document.getElementById('ai-chat-form');
+
+        const toggleChatWindow = () => {
+            if (chatWindow.classList.contains('hidden')) {
+                chatWindow.classList.remove('hidden');
+                setTimeout(() => {
+                    chatWindow.classList.remove('translate-y-4', 'opacity-0');
+                }, 10);
+            } else {
+                chatWindow.classList.add('translate-y-4', 'opacity-0');
+                setTimeout(() => {
+                    chatWindow.classList.add('hidden');
+                }, 300);
+            }
+        };
+
+        chatToggleButton.addEventListener('click', toggleChatWindow);
+        closeChatButton.addEventListener('click', toggleChatWindow);
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleFloatingAIChat();
+        });
+
+        async function handleFloatingAIChat() {
             const chatBox = document.getElementById('ai-chat-box');
             const input = document.getElementById('ai-chat-input');
             const userQuestion = input.value.trim();
             if (!userQuestion) return;
 
-            // Display user's question
             const userBubble = document.createElement('div');
-            userBubble.className = 'p-2 rounded-lg chat-bubble-user';
+            userBubble.className = 'p-3 rounded-lg chat-bubble-user';
             userBubble.textContent = userQuestion;
             chatBox.appendChild(userBubble);
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Display thinking indicator
             const thinkingBubble = document.createElement('div');
-            thinkingBubble.className = 'p-2 rounded-lg chat-bubble-ai';
-            thinkingBubble.textContent = 'Thinking...';
+            thinkingBubble.className = 'p-3 rounded-lg chat-bubble-ai';
+            thinkingBubble.innerHTML = 'Thinking...';
             chatBox.appendChild(thinkingBubble);
             chatBox.scrollTop = chatBox.scrollHeight;
+            
+            let productList = allProducts.map(p => {
+                const category = allCategories.find(c => c.id === p.categoryId);
+                return `- ${p.name} (Category: ${category ? category.name : 'N/A'}): ${p.description}`;
+            }).join('\n');
 
-            const prompt = `You are a friendly and helpful AI assistant for 'Brownie & Co.', a home bakery in India. A customer is asking about a product. Here is the product information:
-            - Name: ${product.name}
-            - Description: ${product.description}
-            - Price: ₹${product.price}
-            
-            Now, answer the customer's question: "${userQuestion}".
-            
-            Keep your answer concise, friendly, and helpful. If the question is about specific ingredients or allergens and you don't know the answer, politely say that you don't have the exact recipe but it's made with high-quality ingredients, and suggest they ask the baker directly for specific allergy concerns. If the question is unrelated to the bakery, politely steer the conversation back to the delicious treats.`;
+            const prompt = `You are 'CoCo', a friendly AI assistant for 'Brownie & Co.', a home bakery in India. Your goal is to help customers find the perfect treat. Here is a list of all available products:\n${productList}\n\nBased on this list, please answer the customer's question: "${userQuestion}".\n\nIf they ask for a recommendation for an occasion (like a birthday, anniversary, Diwali, or just a casual craving), suggest 1-2 items from the list that would be a great fit and briefly explain why. Use Markdown for formatting (e.g., bolding and bullet points). Be warm, friendly, and keep your answers concise. If the question is unrelated to the bakery or its products, politely steer the conversation back.`;
 
             try {
                 const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
                 const payload = { contents: chatHistory };
-                const apiKey = "AIzaSyC-vYnNw_ihPHq7yxc0ENYBk5iEFGY8wkA"; // Will be injected by the environment
+                const apiKey = "AIzaSyC-vYnNw_ihPHq7yxc0ENYBk5iEFGY8wkA"; // Remember to add your API key here for local testing
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -277,7 +318,8 @@
                 
                 const result = await response.json();
                 const aiResponse = result.candidates[0].content.parts[0].text;
-                thinkingBubble.textContent = aiResponse.trim();
+                
+                thinkingBubble.innerHTML = marked.parse(aiResponse.trim());
 
             } catch (error) {
                 console.error("Gemini Chat Error:", error);
@@ -286,6 +328,7 @@
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
         }
+
 
         // --- Google Sheets Contact Form ---
         const contactForm = document.getElementById('contact-form');
@@ -299,21 +342,16 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Sending...';
             try {
-                // FIX: Added mode: 'no-cors' to prevent the CORS-related "Failed to fetch" error.
-                // This sends the data to the Google Sheet without trying to read the cross-origin response,
-                // which is often blocked by browser security policies.
                 await fetch(G_SHEET_URL, { 
                     method: 'POST', 
                     mode: 'no-cors',
                     body: new FormData(contactForm) 
                 });
                 
-                // Since 'no-cors' prevents reading the response, we assume success if no error was thrown.
                 formResponseEl.textContent = "Thank you! We've received your inquiry.";
                 formResponseEl.style.color = 'green';
                 contactForm.reset();
             } catch (error) {
-                // This will now only catch genuine network errors, not CORS blocks.
                 console.error('Error submitting to Google Sheets:', error);
                 formResponseEl.textContent = "Something went wrong. Please try again.";
                 formResponseEl.style.color = 'red';
