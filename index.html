@@ -306,7 +306,7 @@
                 const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
                 const payload = { contents: chatHistory };
                 const apiKey = "AIzaSyDLXBLSD2nrO7czF4B18wzj7_sDJPz6uZ0"; // Remember to add your API key here for local testing
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -363,5 +363,6 @@
     </script>
 </body>
 </html>
+
 
 
