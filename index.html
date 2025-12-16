@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brownie & Co. - Deliciously Yours</title>
+    <title>DJ Brownie. - Deliciously Yours</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <script src="https://dimensions-3d-viewer.cloudinary.com/1.0.12/all.js"></script>
@@ -37,7 +37,7 @@
     <div id="main-website">
         <header class="bg-white shadow-md sticky top-0 z-20">
             <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-                <h1 class="text-3xl text-pink-500 pacifico">Brownie & Co.</h1>
+                <h1 class="text-3xl text-pink-500 pacifico">DJ Brownie .</h1>
                 <div>
                     <a href="#products" class="text-gray-700 hover:text-pink-500 mx-3">Products</a>
                     <a href="#about" class="text-gray-700 hover:text-pink-500 mx-3">About</a>
@@ -76,7 +76,7 @@
                 <div class="container mx-auto px-6">
                     <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Our Story</h2>
                     <div class="max-w-3xl mx-auto text-center text-gray-600">
-                        <p>Welcome to Brownie & Co.! We started in a small home kitchen with a passion for baking and a dream to share our love for desserts. Every brownie and cupcake is a piece of our heart, baked with care, precision, and only the best ingredients.</p>
+                        <p>Welcome to DJ Brownie.! We started in a small home kitchen with a passion for baking and a dream to share our love for desserts. Every brownie and cupcake is a piece of our heart, baked with care, precision, and only the best ingredients.</p>
                     </div>
                 </div>
             </section>
@@ -300,7 +300,7 @@
                 return `- ${p.name} (Category: ${category ? category.name : 'N/A'}): ${p.description}`;
             }).join('\n');
 
-            const prompt = `You are 'CoCo', a friendly AI assistant for 'Brownie & Co.', a home bakery in India. Your goal is to help customers find the perfect treat. Here is a list of all available products:\n${productList}\n\nBased on this list, please answer the customer's question: "${userQuestion}".\n\nIf they ask for a recommendation for an occasion (like a birthday, anniversary, Diwali, or just a casual craving), suggest 1-2 items from the list that would be a great fit and briefly explain why. Use Markdown for formatting (e.g., bolding and bullet points). Be warm, friendly, and keep your answers concise. If the question is unrelated to the bakery or its products, politely steer the conversation back.`;
+            const prompt = `You are 'CoCo', a friendly AI assistant for 'DJ Brownies.', a home bakery in India. Your goal is to help customers find the perfect treat. Here is a list of all available products:\n${productList}\n\nBased on this list, please answer the customer's question: "${userQuestion}".\n\nIf they ask for a recommendation for an occasion (like a birthday, anniversary, Diwali, or just a casual craving), suggest 1-2 items from the list that would be a great fit and briefly explain why. Use Markdown for formatting (e.g., bolding and bullet points). Be warm, friendly, and keep your answers concise. If the question is unrelated to the bakery or its products, politely steer the conversation back.`;
 
             try {
                 const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
@@ -363,3 +363,4 @@
     </script>
 </body>
 </html>
+
