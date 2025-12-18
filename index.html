@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DJ Brownie. - Deliciously Yours</title>
+    <title>DJ Brownies - Deliciously Yours</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <script src="https://dimensions-3d-viewer.cloudinary.com/1.0.12/all.js"></script>
@@ -37,7 +37,7 @@
     <div id="main-website">
         <header class="bg-white shadow-md sticky top-0 z-20">
             <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-                <h1 class="text-3xl text-pink-500 pacifico">DJ Brownie .</h1>
+                <h1 class="text-3xl text-pink-500 pacifico">DJ Brownies</h1>
                 <div>
                     <a href="#products" class="text-gray-700 hover:text-pink-500 mx-3">Products</a>
                     <a href="#about" class="text-gray-700 hover:text-pink-500 mx-3">About</a>
@@ -54,7 +54,7 @@
                         <div class="md:w-1/2 text-left pr-8">
                             <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Baked with Love, Just for You.</h2>
                             <p class="text-lg text-gray-600 mb-8">Discover our heavenly brownies and delightful cupcakes.</p>
-                            <a href="#products" class="bg-pink-500 text-white font-bold py-3 px-8 rounded-full hover:bg-pink-600">Explore Treats</a>
+                            <a href="#products" class="bg-pink-500 text-white font-bold py-3 px-8 rounded-full hover:bg-pink-600">Order Brownies</a>
                         </div>
                         <div class="md:w-1/2 mt-10 md:mt-0">
                              <div id="three-d-viewer" style="height: 400px" class="bg-pink-100 rounded-lg shadow-lg" data-d8s-type="3d" data-d8s-id="uploads_files_3278476_cupcake_k1xmpz-13-7-2025"></div>
@@ -86,6 +86,12 @@
                  <div class="container mx-auto px-6">
                     <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Place Your Order</h2>
                     <div class="max-w-lg mx-auto">
+                        <div class="text-center mb-6 text-gray-600">
+  <p>📦 Pre-orders only</p>
+       <p>🚚 Doorstep delivery in Electronic City</p>
+      <p>📞 Order confirmation via WhatsApp</p>
+</div>
+
                         <form id="contact-form" class="bg-white p-8 rounded-lg shadow-lg">
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
@@ -113,7 +119,7 @@
         
         <footer class="bg-gray-800 text-white py-6">
             <div class="container mx-auto px-6 text-center">
-                <p>&copy; 2025 Brownie & Co. All Rights Reserved.</p>
+                <p>&copy; 2025 DJ Brownies All Rights Reserved.</p>
             </div>
         </footer>
 
@@ -231,7 +237,9 @@
                      <img src="${product.imageUrl || 'https://placehold.co/600x400/f8a5c2/ffffff?text=Yummy!'}" alt="${product.name}" class="w-full h-64 object-cover rounded-t-lg">
                      <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800">${product.name}</h3>
-                        <p class="text-2xl text-pink-500 font-bold my-3">₹${product.price}</p>
+                       <p class="text-gray-600 text-sm mt-1">100g per piece</p>
+0                       <p class="text-pink-500 font-semibold">₹${product.price}</p>
+
                         <p class="text-gray-600 mb-4">${product.description}</p>
                      </div>
                 </div>`;
@@ -300,7 +308,7 @@
                 return `- ${p.name} (Category: ${category ? category.name : 'N/A'}): ${p.description}`;
             }).join('\n');
 
-            const prompt = `You are 'CoCo', a friendly AI assistant for 'DJ Brownies.', a home bakery in India. Your goal is to help customers find the perfect treat. Here is a list of all available products:\n${productList}\n\nBased on this list, please answer the customer's question: "${userQuestion}".\n\nIf they ask for a recommendation for an occasion (like a birthday, anniversary, Diwali, or just a casual craving), suggest 1-2 items from the list that would be a great fit and briefly explain why. Use Markdown for formatting (e.g., bolding and bullet points). Be warm, friendly, and keep your answers concise. If the question is unrelated to the bakery or its products, politely steer the conversation back.`;
+            const prompt = `You are 'CoCo', a friendly AI assistant for 'DJ Brownies', a home bakery in India. Your goal is to help customers find the perfect treat. Here is a list of all available products:\n${productList}\n\nBased on this list, please answer the customer's question: "${userQuestion}".\n\nIf they ask for a recommendation for an occasion (like a birthday, anniversary, Diwali, or just a casual craving), suggest 1-2 items from the list that would be a great fit and briefly explain why. Use Markdown for formatting (e.g., bolding and bullet points). Be warm, friendly, and keep your answers concise. If the question is unrelated to the bakery or its products, politely steer the conversation back.`;
 
             try {
                 const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
@@ -363,6 +371,7 @@
     </script>
 </body>
 </html>
+
 
 
 
